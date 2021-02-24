@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +10,15 @@ import { catchError, retry } from 'rxjs/operators';
 export class TicketService {
   BASE_URL_TICKET_API: string = 'http://localhost:3000/support-tickets'
 
-  constructor(private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
   getTickets() {
+    console.log(`getting all ticket...`);
     return this.http.get(this.BASE_URL_TICKET_API);
   }
 
   getTicket(ticketId: number): Observable<any> {
+    console.log(`getting ticket... ticketId=${ticketId}`);
     return this.http.get(`${this.BASE_URL_TICKET_API}/${ticketId}`)
       .pipe(
         catchError(error => {
@@ -27,15 +30,13 @@ export class TicketService {
       );
   }
 
-  deleteTicket(ticketId: number) {
-    return this.http.delete(`${this.BASE_URL_TICKET_API}/${ticketId}`)
-    .subscribe(
-      (response) => {
-        console.log('postTicket successful... response=', response);
-      }, this.errorHandler);
+  deleteTicket(ticketId: number): Observable<any> {
+    console.log(`deleting ticket... ticketId=${ticketId}`);
+    return this.http.delete(`${this.BASE_URL_TICKET_API}/${ticketId}`);
   }
 
   postTicket(ticket: any) {
+    console.log(`saving ticket... ticket=${ticket}`);
     return this.http.post(`${this.BASE_URL_TICKET_API}`, ticket)
       .subscribe(
         (response) => {
@@ -43,7 +44,8 @@ export class TicketService {
         }, this.errorHandler);
   }
 
-  errorHandler(error): void {
+  errorHandler(error): Observable<any> {
     console.error(error);
+    return of({});
   }
 }

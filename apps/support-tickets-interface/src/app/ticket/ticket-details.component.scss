@@ -1,4 +1,14 @@
-mat-card-actions {
+.ticket-details {
+    width: 50%;
+}
+.ticket-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    > div {
+        justify-content: flex-end;
+    }
+}
+.deleted {
+    color: red;
 }
