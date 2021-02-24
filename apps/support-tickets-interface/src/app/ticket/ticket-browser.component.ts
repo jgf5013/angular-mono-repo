@@ -35,6 +35,9 @@ export class TicketBrowserComponent {
     this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
+  goToTicketDetails(id: number) {
+    this.router.navigate([id], {relativeTo: this.activatedRoute});
+  }
 
 }
 

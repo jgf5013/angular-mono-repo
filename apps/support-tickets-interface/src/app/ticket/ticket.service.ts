@@ -27,27 +27,23 @@ export class TicketService {
       );
   }
 
-  deleteTicket(ticketId: number): Observable<any> {
+  deleteTicket(ticketId: number) {
     return this.http.delete(`${this.BASE_URL_TICKET_API}/${ticketId}`)
-      .pipe(
-        catchError(error => {
-          return throwError({
-            message: `An error occurred while deleting ${ticketId}`,
-            ticketId
-          });
-        })
-      );
+    .subscribe(
+      (response) => {
+        console.log('postTicket successful... response=', response);
+      }, this.errorHandler);
   }
 
-  postTicket(ticket: any): Observable<any> {
+  postTicket(ticket: any) {
     return this.http.post(`${this.BASE_URL_TICKET_API}`, ticket)
-      .pipe(
-        catchError(error => {
-          return throwError({
-            message: `An error occurred while creating the ticket`,
-            ticket
-          });
-        })
-      );
+      .subscribe(
+        (response) => {
+          console.log('postTicket successful... response=', response);
+        }, this.errorHandler);
+  }
+
+  errorHandler(error): void {
+    console.error(error);
   }
 }

@@ -1,11 +1,26 @@
-<form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-label>Favorite food</mat-label>
-      <input matInput placeholder="Ex. Pizza" value="Sushi" />
+<form id="newTicket">
+    <mat-form-field class="ticket-detail">
+      <mat-label>Title</mat-label>
+      <input matInput [formControl] = "titleFormControl"/>
     </mat-form-field>
   
-    <mat-form-field class="example-full-width">
-      <mat-label>Leave a comment</mat-label>
-      <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+    <mat-form-field class="ticket-detail">
+      <mat-label>Description</mat-label>
+      <textarea rows="10" matInput [formControl] = "descriptionFormControl"></textarea>
     </mat-form-field>
-  </form>
+
+    <mat-form-field class="ticket-detail">
+      <input matInput placeholder = "Email" [formControl] = "emailFormControl">
+      <mat-error *ngIf="emailFormControl.dirty && emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf = "emailFormControl.dirty && emailFormControl.hasError('required')">
+        Email is required
+      </mat-error>
+    </mat-form-field>
+
+
+    <button id="save" mat-fab color="primary" aria-label="Create a new ticket" (click)="saveTicket()">
+        <mat-icon>save</mat-icon>
+    </button>
+</form>

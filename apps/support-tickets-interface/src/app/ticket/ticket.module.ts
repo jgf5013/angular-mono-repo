@@ -6,13 +6,16 @@ import { TicketService } from './ticket.service';
 import { TicketRoutingModule } from './ticket-routing.module';
 import { NewTicketComponent } from './new-ticket.component';
 import { AppMaterialModule } from '../material/app-material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
     TicketRoutingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [TicketBrowserComponent, TicketDetailsComponent, NewTicketComponent],
   exports: [
