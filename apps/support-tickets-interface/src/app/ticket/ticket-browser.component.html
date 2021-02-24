@@ -3,7 +3,9 @@
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
       <td mat-cell *matCellDef="let element" >
-        <button mat-raised-button (click)="goToTicketDetails(element.id)" color="primary">{{element.id}}</button>
+        <button mat-icon-button (click)="goToTicketDetails(element.id)" color="primary">
+          {{element.id}}<mat-icon>open_in_new</mat-icon>
+        </button>
       </td>
     </ng-container>   
     <ng-container matColumnDef="title">
@@ -28,7 +30,13 @@
     </ng-container>
     <ng-container matColumnDef="refersTo">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Refers To </th>
-      <td mat-cell *matCellDef="let element"> {{element.refersTo}} </td>
+      <td mat-cell *matCellDef="let element">
+        <span class="related-tickets" *ngFor="let relatedTicket of element.refersTo">
+          <a href="#" (click)="goToTicketDetails(relatedTicket)">
+            {{relatedTicket}}
+          </a>
+        </span> 
+      </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
