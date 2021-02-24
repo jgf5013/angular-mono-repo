@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TicketBrowserComponent } from './ticket-browser.component';
-import { TicketComponent } from './ticket.component';
+import { TicketDetailsComponent } from './ticket-details.component';
+import { NewTicketComponent } from './new-ticket.component';
 
 const routes: Routes = [
   { path: '', component: TicketBrowserComponent },
-  { path: ':ticketId', component: TicketComponent }
+  { path: 'new', component: NewTicketComponent},
+  { path: ':ticketId', component: TicketDetailsComponent },
 ];
 
 @NgModule({
