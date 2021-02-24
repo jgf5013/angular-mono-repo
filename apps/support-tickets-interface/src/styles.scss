@@ -1,4 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+$blue: #000016;
+$text-color: whitesmoke;
+$text-color-accent: limegreen;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    background-color: $blue;
+    color: $text-color;
+    margin: 0 auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    > * {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .centered-column {
+        display: flex;
+        flex-direction: column;
+        > * {
+            padding: 10px;
+        }
+    }
+
+}
+
+.accent {
+    color: $text-color-accent;
+}
