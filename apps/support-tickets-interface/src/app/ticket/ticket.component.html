@@ -1,1 +1,9 @@
-<p>ticket works!</p>
+<div>Id: {{(ticket | async)?.id}}</div>
+<div>Title: {{(ticket | async)?.title}}</div>
+<div>Status: {{(ticket | async)?.status}}</div>
+<div>Description: {{(ticket | async)?.description}}</div>
+<div>Priority: {{(ticket | async)?.priority}}</div>
+<div>Email: {{(ticket | async)?.email}}</div>
+<div>Refers To: {{(ticket | async)?.refersTo}}</div>
+
+
