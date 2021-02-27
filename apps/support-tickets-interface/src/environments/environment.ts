@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  BASE_URL_TICKET_API: 'http://localhost:3000/support-tickets'
 };
 
 /*

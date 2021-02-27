@@ -3,43 +3,52 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { StatusType, PriorityType, SaveType } from './ticket-constants';
-import { INewSupportTicket, IExistingSupportTicket } from './types';
+import { StatusType, PriorityType, SaveType } from '../constants';
+import { INewSupportTicket, IExistingSupportTicket, TicketError } from './types';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  BASE_URL_TICKET_API: string = 'http://localhost:3000/support-tickets'
 
   constructor(private router: Router, private http: HttpClient) {
   }
 
-  getTickets() {
-    console.log(`getting all ticket...`);
-    return this.http.get(this.BASE_URL_TICKET_API);
-  }
-
-  getTicket(ticketId: number): Observable<any> {
-    console.log(`getting ticket... ticketId=${ticketId}`);
-    return this.http.get(`${this.BASE_URL_TICKET_API}/${ticketId}`)
+  getTickets(): Observable<IExistingSupportTicket[]> {
+    console.log(`getting all tickets...`);
+    return this.http.get<IExistingSupportTicket[]>(environment.BASE_URL_TICKET_API)
       .pipe(
         catchError(error => {
-          return throwError({
-            message: `An error occurred while fetching ticket details for ticket ${ticketId}`,
-            ticketId
-          });
+          const ticketError: TicketError = {
+            message: `An error occurred while fetching tickets`,
+            error
+          };
+          console.error(ticketError);
+          return of([]);
         })
       );
   }
 
-  deleteTicket(ticketId: number): Observable<any> {
-    console.log(`deleting ticket... ticketId=${ticketId}`);
-    return this.http.delete(`${this.BASE_URL_TICKET_API}/${ticketId}`);
+  getTicket(ticketId: number): Observable<IExistingSupportTicket> {
+    console.log(`getting ticket... ticketId=${ticketId}`);
+    return this.http.get<IExistingSupportTicket>(`${environment.BASE_URL_TICKET_API}/${ticketId}`)
+      .pipe(
+        catchError(error => {
+          const ticketError: TicketError = {
+            message: `An error occurred while fetching ticket details for ticket ${ticketId}`,
+            ticket: {id: ticketId},
+            error
+          };
+          console.error(ticketError);
+          return throwError(ticketError);
+        })
+      );
   }
 
   // saveTicket(ticket: INewSupportTicket | IExistingSupportTicket, saveType: SaveType) {
-  saveTicket(ticket: any, saveType: SaveType) {
+  saveTicket(ticket: any, saveType: SaveType): Observable<IExistingSupportTicket> {
     if(saveType === SaveType.CREATE) {
       return this.postTicket(ticket);
     } else if(saveType === SaveType.UPDATE) {
@@ -49,27 +58,53 @@ export class TicketService {
     }
   }
 
-  private postTicket(ticket: INewSupportTicket) {
+  private postTicket(ticket: INewSupportTicket): Observable<IExistingSupportTicket> {
     console.log(`posting new ticket... ticket=${ticket}`);
-    return this.http.post(`${this.BASE_URL_TICKET_API}`, ticket)
-      .subscribe(
-        (response) => {
-          console.log('postTicket successful... response=', response);
-        }, this.errorHandler);
+    return this.http.post<IExistingSupportTicket>(`${environment.BASE_URL_TICKET_API}`, ticket)
+      .pipe(
+        catchError(error => {
+          const ticketError: TicketError = {
+            message: `An error occurred while creating ticket`,
+            ticket,
+            error
+          };
+          console.error(ticketError);
+          return throwError(ticketError);
+        })
+      )
   }
 
-  private putTicket(ticket: IExistingSupportTicket) {
+  private putTicket(ticket: IExistingSupportTicket): Observable<IExistingSupportTicket> {
     console.log(`patching existing ticket... ticket=`, ticket);
-    return this.http.put(`${this.BASE_URL_TICKET_API}/${ticket.id}`, ticket)
-      .subscribe(
-        (response) => {
-          console.log('putTicket successful... response=', response);
-        }, this.errorHandler);
+    return this.http.put<IExistingSupportTicket>(`${environment.BASE_URL_TICKET_API}/${ticket.id}`, ticket)
+      .pipe(
+        catchError(error => {
+          const ticketError: TicketError = {
+            message: `An error occurred while creating ticket`,
+            ticket,
+            error
+          };
+          console.error(ticketError);
+          return throwError(ticketError);
+        })
+      )
   }
 
-  errorHandler(error): Observable<any> {
-    console.error(error);
-    return of({});
+  /* Note: delete returns an empty object ({}) on success and failure */
+  deleteTicket(ticketId: number): Observable<any> {
+    console.log(`deleting ticket... ticketId=${ticketId}`);
+    return this.http.delete(`${environment.BASE_URL_TICKET_API}/${ticketId}`)
+      .pipe(
+        catchError(error => {
+          const ticketError: TicketError = {
+            message: `An error occurred while deleting ticket ${ticketId}`,
+            ticket: {id: ticketId},
+            error
+          };
+          console.error(ticketError);
+          return throwError(ticketError);
+        })
+      )
   }
 
   getStatusMap() {

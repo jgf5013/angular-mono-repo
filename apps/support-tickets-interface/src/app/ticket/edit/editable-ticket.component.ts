@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SaveType } from '../ticket-constants';
+import { SaveType, StatusType } from '../../constants';
 import { TicketService } from '../ticket.service';
-import { INewSupportTicket, IExistingSupportTicket } from '../types';
+import { INewSupportTicket, IExistingSupportTicket, TicketError } from '../types';
 
 @Component({
   selector: 'brightcomputing-editable-ticket',
@@ -18,12 +18,14 @@ export class EditableTicketComponent {
   statusMap: number[];
   priorityMap: number[];
   saveType: SaveType;
+  showDelete: boolean;
 
 
   constructor(private router: Router, private route: ActivatedRoute, private ticketService: TicketService, private snackBar: MatSnackBar) {
     this.route.params.subscribe((param: any) => {
       if(param.ticketId) {
         this.saveType = SaveType.UPDATE;
+        this.showDelete = true;
         this.loadTicketById(param.ticketId);
       } else {
         this.saveType = SaveType.CREATE;
@@ -33,8 +35,6 @@ export class EditableTicketComponent {
     this.statusMap = this.ticketService.getStatusMap();
     this.priorityMap = this.ticketService.getPriorityMap();
 
-    console.log('statusMap: ', this.statusMap);
-    console.log('priorityMap: ', this.priorityMap);
   }
 
 
@@ -49,30 +49,51 @@ export class EditableTicketComponent {
       ticket => {
         this.ticket = ticket;
       },
-      error => {
+      (error: TicketError) => {
         this.ticket = null;
+        this.handleFailure(error);
       });
   }
 
   loadNewTicket(): void {
-    this.ticket = {};
+    this.ticket = {
+      status: StatusType.OPEN
+    };
   }
 
 
   saveTicket(): void {
-    this.ticketService.saveTicket(this.ticket, this.saveType);
+    this.ticketService.saveTicket(this.ticket, this.saveType).subscribe(
+      (responseTicket: IExistingSupportTicket) => {
+        let message: string = `${SaveType[this.saveType]}: Ticket saved successfully. Ticket # ${responseTicket.id}`;
+        this.handleSuccess(message);
+      },
+      (err: TicketError) => {
+        this.handleFailure(err)
+      }
+    )
   }
 
   deleteTicket(ticketId: number): void {
     this.ticketService.deleteTicket(ticketId).subscribe(
-      data => {
-        let message: string = `Ticket ${ticketId} deleted successfully. Redirecting to ticket browser...`;
+      (data: any) => {
+        let message: string = `DELETE: Ticket ${ticketId} deleted successfully. Redirecting to ticket browser...`;
         this.handleSuccessfulDeletion(message);
       },
-      err => {
-        console.error(err);
+      (err: TicketError) => {
+        this.handleFailure(err)
       }
     )
+  }
+
+
+  handleSuccess(message: string): void {
+    this.snackConfig = {
+      panelClass: ['success']
+    }
+    this.snackBar.open(message, '', {
+      duration: 3000,
+    });
   }
 
   handleSuccessfulDeletion(message: string): void {
@@ -87,6 +108,17 @@ export class EditableTicketComponent {
     ref.afterDismissed().subscribe(() => {
       this.goToTicketBrowser();
     });
+  }
+
+  handleFailure(ticketError: TicketError): void {
+
+    this.snackConfig = {
+      panelClass: ['failure']
+    }
+    this.snackBar.open(ticketError.message, '', {
+      duration: 5000,
+    });
+
   }
 
 }
