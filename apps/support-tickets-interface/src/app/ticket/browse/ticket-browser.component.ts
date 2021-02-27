@@ -3,7 +3,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { TicketService } from './ticket.service';
+import { TicketService } from '../ticket.service';
+import { IExistingSupportTicket, INewSupportTicket } from '../types';
+
+// import { ISupportTicket } from '../types';
+
 
 @Component({
   selector: 'brightcomputing-ticket-browser',
@@ -25,7 +29,7 @@ export class TicketBrowserComponent {
   
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private ticketService: TicketService) {
     this.ticketService.getTickets()
-    .subscribe((tickets: any[]) => {
+    .subscribe((tickets: INewSupportTicket[] | IExistingSupportTicket[]) => {
       this.tickets = new MatTableDataSource(tickets);
       this.tickets.sort = this.sort;
     })

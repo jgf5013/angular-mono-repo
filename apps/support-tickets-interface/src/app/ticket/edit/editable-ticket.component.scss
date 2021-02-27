@@ -1,0 +1,48 @@
+#editableTicketForm {
+  width: 100%;
+}
+mat-form-field {
+  width: 100%;
+}
+.ticket-content {
+  display: flex;
+  flex-direction: row;
+  > div {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    > * {
+      padding: 5px;
+    }
+  }
+}
+
+#save {
+  align-self: flex-end;
+}
+
+.deleted {
+  color: red;
+}
+
+
+.action-buttons {
+
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+      justify-content: flex-end;
+  }
+}
+
+.button-toggles {
+  display: flex;
+  justify-content: space-between;
+}
+
+.description {
+  display: flex;
+  flex-grow: 2;
+}

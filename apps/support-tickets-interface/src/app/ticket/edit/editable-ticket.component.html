@@ -1,0 +1,49 @@
+<div class="editable-ticket">
+  <form #editableTicketForm="ngForm" id="editableTicketForm">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput name="title" class="ticket-title" placeholder="Leave a descriptive title" [(ngModel)]="ticket.title" mat-autosize required/>
+    </mat-form-field>
+
+    <div class="ticket-content">
+      <div class="description">
+        <mat-form-field appearance="fill">
+          <textarea name="description" matInput placeholder="Ticket description" rows="10" [(ngModel)]="ticket.description"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <div class="button-toggles">
+          <mat-button-toggle-group name="status" [(ngModel)]="ticket.status" required>
+            <mat-button-toggle *ngFor="let status of statusMap; let i = index" value="i" aria-label="status-{{status}}">{{status}}</mat-button-toggle>
+          </mat-button-toggle-group>
+          <mat-button-toggle-group name="priority" [(ngModel)]="ticket.priority" required>
+            <mat-button-toggle *ngFor="let priority of priorityMap; let i = index" value="i" aria-label="priority-{{priority}}">{{priority}}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <mat-form-field appearance="fill">
+          <input name="email" matInput #email="ngModel" placeholder="email" [(ngModel)]="ticket.email" email required>
+          <mat-error *ngIf="!email.errors?.required && email.errors?.email && (email?.dirty || email?.touched)">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="email.errors?.required && (email?.dirty || email?.touched)">
+            Email is required
+          </mat-error>
+        </mat-form-field>
+        <div>Refers To: {{ticket.refersTo}}</div>
+      </div>
+    </div>
+    <div class="action-buttons">
+        <button mat-stroked-button (click)="goToTicketBrowser()">
+          <mat-icon>arrow_back_io</mat-icon>All Tickets
+        </button>
+        <div>
+            <button mat-stroked-button color="warn" (click)="deleteTicket(ticket.id)">
+              <mat-icon>delete</mat-icon>Delete
+            </button>
+            <button mat-stroked-button [disabled]="!editableTicketForm.valid" (click)="saveTicket()">
+              <mat-icon>save</mat-icon>Save
+            </button>
+        </div>
+      </div>
+  </form>
+</div>
