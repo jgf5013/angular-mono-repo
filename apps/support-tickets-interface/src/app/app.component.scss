@@ -1,5 +1,7 @@
-div {
-    padding: 1em;
+// @import '~@angular/material/theming';
+.main-content {
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
+    height: 90vh;
 }

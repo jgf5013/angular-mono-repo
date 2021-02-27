@@ -12,7 +12,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$brightcomputing-primary: mat-palette($mat-blue, A200, A11, A400);
+$brightcomputing-primary: mat-palette($mat-indigo, 800, 400, 900);
 $brightcomputing-accent: mat-palette($mat-light-green, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -34,8 +34,15 @@ $brightcomputing-theme: mat-light-theme((
 @include angular-material-theme($brightcomputing-theme);
 
 
-html, body { height: 100vh; }
+html, body {
+  margin: 0 auto;
+  height: 100vh;
+}
 
 button:not(:first-child) {
   margin-left: 10px;
+}
+
+router-outlet + * {
+  height: 100%;
 }

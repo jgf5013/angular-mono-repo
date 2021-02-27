@@ -1,8 +1,14 @@
-#editableTicketForm {
-  width: 100%;
+.editable-ticket {
+  height: 100%;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  height: 100%;
 }
 mat-form-field {
-  width: 100%;
+  min-width: 50%;
 }
 .ticket-content {
   display: flex;
@@ -11,6 +17,7 @@ mat-form-field {
     padding: 5px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
     > * {
       padding: 5px;
@@ -22,13 +29,9 @@ mat-form-field {
   align-self: flex-end;
 }
 
-.deleted {
-  color: red;
-}
-
 
 .action-buttons {
-
+  margin-top: auto;
   display: flex;
   justify-content: space-between;
 
