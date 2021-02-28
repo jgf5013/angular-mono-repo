@@ -11,6 +11,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatSortModule } from '@angular/material/sort';
 
 
 const materialModules = [
@@ -18,6 +19,7 @@ const materialModules = [
   MatButtonModule,
   MatIconModule,
   MatCardModule,
+  MatSortModule,
   MatTableModule,
   MatFormFieldModule,
   MatSnackBarModule,

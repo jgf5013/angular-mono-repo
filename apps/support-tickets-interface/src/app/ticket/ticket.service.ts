@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { StatusType, PriorityType, SaveType } from '../constants';
+import { StatusType, PriorityType, SaveType } from './constants';
 import { INewSupportTicket, IExistingSupportTicket, TicketError } from './types';
 
 import { environment } from '../../environments/environment';
@@ -59,7 +59,7 @@ export class TicketService {
   }
 
   private postTicket(ticket: INewSupportTicket): Observable<IExistingSupportTicket> {
-    console.log(`posting new ticket... ticket=${ticket}`);
+    console.log(`posting new ticket... ticket=`, ticket);
     return this.http.post<IExistingSupportTicket>(`${environment.BASE_URL_TICKET_API}`, ticket)
       .pipe(
         catchError(error => {

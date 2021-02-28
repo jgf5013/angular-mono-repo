@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TicketService } from '../ticket.service';
 import { IExistingSupportTicket, INewSupportTicket } from '../types';
+import { Store } from '@ngrx/store';
 
-// import { ISupportTicket } from '../types';
+import * as fromRoot from '../../reducer';
+import { getTicketsState, TicketState } from '../ticket.reducer';
 
 
 @Component({
@@ -14,9 +16,10 @@ import { IExistingSupportTicket, INewSupportTicket } from '../types';
   templateUrl: './ticket-browser.component.html',
   styleUrls: ['./ticket-browser.component.scss']
 })
-export class TicketBrowserComponent {
+export class TicketBrowserComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'title', 'status', 'description', 'priority', 'email', 'refersTo'];
+  mobileDisplayedColumns: string[] = ['priority', 'title'];
+  displayedColumns: string[] = ['id', 'status', 'description', 'email', 'refersTo', ...this.mobileDisplayedColumns];
   colorMap: any = {
     0: 'black',
     1: 'black',
@@ -27,12 +30,27 @@ export class TicketBrowserComponent {
   @ViewChild(MatSort) sort: MatSort;
   tickets: MatTableDataSource<any>;
   
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private ticketService: TicketService) {
-    this.ticketService.getTickets()
-    .subscribe((tickets: INewSupportTicket[] | IExistingSupportTicket[]) => {
-      this.tickets = new MatTableDataSource(tickets);
-      this.tickets.sort = this.sort;
-    })
+  ticketState: TicketState;
+  constructor(
+    private store: Store<fromRoot.State>, private activatedRoute: ActivatedRoute,
+    private router: Router, private ticketService: TicketService) {
+    this.store.select(getTicketsState)
+      .subscribe((ticketState: TicketState) => {
+        this.ticketState = ticketState;
+
+        this.tickets = new MatTableDataSource(this.ticketState.tickets);
+      });
+  }
+
+
+  ngAfterViewInit() {
+    this.sort.sort({id: 'priority', start: 'desc', disableClear: false});
+    this.tickets.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.tickets.filter = filterValue.trim().toLowerCase();
   }
 
   createNewTicket() {

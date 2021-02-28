@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SaveType, StatusType } from '../../constants';
+
+import * as fromRoot from '../../reducer';
+import * as TicketActions from '../ticket.actions';
+import { SaveType, StatusType } from '../constants';
 import { TicketService } from '../ticket.service';
 import { INewSupportTicket, IExistingSupportTicket, TicketError } from '../types';
+
 
 @Component({
   selector: 'brightcomputing-editable-ticket',
@@ -21,7 +26,7 @@ export class EditableTicketComponent {
   showDelete: boolean;
 
 
-  constructor(private router: Router, private route: ActivatedRoute, private ticketService: TicketService, private snackBar: MatSnackBar) {
+  constructor(private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute, private ticketService: TicketService, private snackBar: MatSnackBar) {
     this.route.params.subscribe((param: any) => {
       if(param.ticketId) {
         this.saveType = SaveType.UPDATE;
@@ -65,6 +70,8 @@ export class EditableTicketComponent {
   saveTicket(): void {
     this.ticketService.saveTicket(this.ticket, this.saveType).subscribe(
       (responseTicket: IExistingSupportTicket) => {
+        // ticketCreated effect will reload the ticket queue
+        this.store.dispatch(SaveType.CREATE === this.saveType ? TicketActions.createTicket() : TicketActions.updateTicket());
         let message: string = `${SaveType[this.saveType]}: Ticket saved successfully. Ticket # ${responseTicket.id}`;
         this.handleSuccess(message);
       },
@@ -77,6 +84,8 @@ export class EditableTicketComponent {
   deleteTicket(ticketId: number): void {
     this.ticketService.deleteTicket(ticketId).subscribe(
       (data: any) => {
+        // ticketCreated effect will reload the ticket queue
+        this.store.dispatch(TicketActions.deleteTicket());
         let message: string = `DELETE: Ticket ${ticketId} deleted successfully. Redirecting to ticket browser...`;
         this.handleSuccessfulDeletion(message);
       },
