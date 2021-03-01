@@ -5,6 +5,12 @@ export enum PriorityType {
     CRITICAL = 2
 };
 
+export const priorityColorMap = {
+    0: 'black',
+    1: 'orange',
+    2: 'red'
+}
+
 export enum StatusType {
     OPEN       = 0,
     INPROGRESS = 1,

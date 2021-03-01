@@ -5,22 +5,22 @@
       <input matInput name="title" class="ticket-title" placeholder="Leave a descriptive title" [(ngModel)]="ticket.title" mat-autosize required/>
     </mat-form-field>
 
-    <div class="ticket-content">
+    <div class="ticket-content" fxLayout.gt-sm="row">
       <div class="description">
         <mat-form-field appearance="fill">
           <textarea name="description" matInput placeholder="Ticket description" rows="10" [(ngModel)]="ticket.description"></textarea>
         </mat-form-field>
       </div>
       <div>
-        <div class="button-toggles">
-          <mat-button-toggle-group name="status" [(ngModel)]="ticket.status" required>
+        <div fxLayout.lt-md="row">
+          <mat-button-toggle-group class="input-item" name="status" [(ngModel)]="ticket.status" required>
             <mat-button-toggle *ngFor="let status of statusMap | keyvalue" value="{{status.key}}" aria-label="status-{{status.value}}">{{status.value}}</mat-button-toggle>
           </mat-button-toggle-group>
-          <mat-button-toggle-group name="priority" [(ngModel)]="ticket.priority" required>
+          <mat-button-toggle-group style="margin-left: auto;" class="input-item" name="priority" [(ngModel)]="ticket.priority" required>
             <mat-button-toggle *ngFor="let priority of priorityMap | keyvalue" value="{{priority.key}}" aria-label="priority-{{priority.value}}">{{priority.value}}</mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="input-item">
           <input name="email" matInput #email="ngModel" placeholder="email" [(ngModel)]="ticket.email" email required>
           <mat-error *ngIf="!email.errors?.required && email.errors?.email && (email?.dirty || email?.touched)">
             Please enter a valid email address
@@ -29,19 +29,39 @@
             Email is required
           </mat-error>
         </mat-form-field>
-        <div>Refers To: {{ticket.refersTo}}</div>
+        <div>
+          <mat-chip-list class="input-item" #chipList aria-label="Related tickets selection">
+            <mat-chip
+              *ngFor="let relatedTicket of relatedTickets"
+              [selectable]="refersToOptions.selectable"
+              [removable]="refersToOptions.removable"
+              (removed)="removeRelated(relatedTicket)">
+              {{relatedTicket.title}}
+              <mat-icon matChipRemove *ngIf="refersToOptions.removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Add a related ticket..."
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectRelated($event)">
+            <mat-option *ngFor="let relatableTicket of relatableTickets" [value]="relatableTicket">
+              {{relatableTicket.title}}
+            </mat-option>
+          </mat-autocomplete>
+        </div>
       </div>
     </div>
-    <div class="action-buttons">
+    <div class="action-buttons" >
         <button mat-stroked-button (click)="goToTicketBrowser()">
-          <mat-icon>arrow_back_io</mat-icon>All Tickets
+          <mat-icon>arrow_back_io</mat-icon><span fxShow fxHide.lt-sm="true">All Tickets</span>
         </button>
         <div>
             <button *ngIf="showDelete" mat-stroked-button color="warn" (click)="deleteTicket(ticket.id)">
-              <mat-icon>delete</mat-icon>Delete
+              <mat-icon>delete</mat-icon><span fxShow fxHide.lt-sm="true">Delete</span>
             </button>
             <button type="submit" mat-stroked-button [disabled]="!editableTicketForm.valid" (click)="saveTicket()" color="primary">
-              <mat-icon>save</mat-icon>Save
+              <mat-icon>save</mat-icon><span fxShow fxHide.lt-sm="true">Save</span>
             </button>
         </div>
       </div>

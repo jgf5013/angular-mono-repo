@@ -32,3 +32,12 @@
         }
     }
 }
+
+.clickable {
+    &:hover {
+        cursor: pointer;
+    }
+}
+mat-chip-list mat-chip {
+    padding: 5px;
+}

@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { AfterViewInit, Component } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { Store } from '@ngrx/store';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import * as TicketActions from '../ticket.actions';
 import { SaveType, StatusType } from '../constants';
+import * as TicketActions from '../ticket.actions';
 import { TicketService } from '../ticket.service';
-import { INewSupportTicket, IExistingSupportTicket, TicketError } from '../types';
+import { IExistingSupportTicket, INewSupportTicket, TicketError } from '../types';
+import { getTicketsState, TicketState } from '../ticket.reducer';
+
 
 
 @Component({
@@ -24,11 +25,39 @@ export class EditableTicketComponent {
   priorityMap: number[];
   saveType: SaveType;
   showDelete: boolean;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  refersToOptions: any = {
+    visible: true,
+    selectable: true,
+    removable: true
+  };
+  ticketId: number;
+  relatableTickets: IExistingSupportTicket[] = [];
+  relatedTickets: IExistingSupportTicket[] = [];
+  ticketState: TicketState;
 
 
-  constructor(private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute, private ticketService: TicketService, private snackBar: MatSnackBar) {
+  constructor(
+    private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute,
+    private ticketService: TicketService, private snackBar: MatSnackBar) {
+
+    this.loadTicket();
+    this.statusMap = this.ticketService.getStatusMap();
+    this.priorityMap = this.ticketService.getPriorityMap();
+
+    this.store.select(getTicketsState)
+      .subscribe((ticketState: TicketState) => {
+        this.ticketState = ticketState;
+      });
+
+  }
+
+  loadTicket(): void {
+
     this.route.params.subscribe((param: any) => {
       if(param.ticketId) {
+        this.ticketId = param.ticketId;
         this.saveType = SaveType.UPDATE;
         this.showDelete = true;
         this.loadTicketById(param.ticketId);
@@ -37,11 +66,20 @@ export class EditableTicketComponent {
         this.loadNewTicket();
       }
     });
-    this.statusMap = this.ticketService.getStatusMap();
-    this.priorityMap = this.ticketService.getPriorityMap();
-
   }
 
+  setRelatableTickets(): void {
+    this.relatableTickets = this.ticketState.tickets.filter((ticket: IExistingSupportTicket) => {
+      return (ticket.id !== this.ticketId) && (this.ticket.refersTo?.indexOf(ticket.id) === -1);
+    })
+  }
+
+  setRelatedTickets(): void {
+
+    this.relatedTickets = this.ticketState.tickets.filter((ticket: IExistingSupportTicket) => {
+      return this.ticket.refersTo && this.ticket.refersTo.indexOf(ticket.id) !== -1;
+    })
+  }
 
   goToTicketBrowser(): void {
     this.router.navigate(['tickets']);
@@ -53,6 +91,8 @@ export class EditableTicketComponent {
     .subscribe(
       ticket => {
         this.ticket = ticket;
+        this.setRelatableTickets();
+        this.setRelatedTickets();
       },
       (error: TicketError) => {
         this.ticket = null;
@@ -128,6 +168,14 @@ export class EditableTicketComponent {
       duration: 5000,
     });
 
+  }
+
+  removeRelated() {
+
+  }
+
+  selectRelated(relatedTicket: IExistingSupportTicket) {
+    console.log('relatedTicket: ', relatedTicket);
   }
 
 }
