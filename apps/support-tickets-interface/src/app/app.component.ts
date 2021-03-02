@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute, Event, NavigationStart, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
 import * as fromRoot from './reducer';
 import * as TicketActions from './ticket/ticket.actions';
 import { getTicketsState, TicketState } from './ticket/ticket.reducer';
-import { ActivatedRoute, Event, Router, UrlSegment } from '@angular/router';
-import { NavigationStart } from '@angular/router';
-import { filter } from 'rxjs/operators';
 
 
 
@@ -14,24 +15,45 @@ import { filter } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   ticketState: TicketState;
   stateLoaded = true;
   breadCrumbs: string[];
-  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute, private router: Router) {
+
+  @ViewChild('sidenav') sidenav: MatSidenav;
+  
+  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute, private router: Router, public mediaObserver: MediaObserver) {
+    
+    this.listenToRouterUpdates();
+    this.listenToMediaUpdates();
+    this.listenToTicketStateUpdates();
+
     this.store.dispatch(TicketActions.loadTickets());
+  }
+
+  listenToTicketStateUpdates(): void {
+    this.store.select(getTicketsState)
+      .subscribe((ticketState: TicketState) => {
+        this.ticketState = ticketState;
+        this.stateLoaded = true;
+      });
+  }
+
+  listenToMediaUpdates(): void {
+    this.mediaObserver.asObservable()
+    .subscribe((change: MediaChange[]) => {
+      if (!this.mediaObserver.isActive('gt-xs')) {
+        this.sidenav.close();
+      }
+    });
+  }
+
+  listenToRouterUpdates(): void {
     this.router.events.pipe(
       filter((event: Event) => event instanceof NavigationStart)
     )
     .subscribe((navigationStart: NavigationStart) => {
       this.breadCrumbs = navigationStart.url.split('/').filter(s => s)
     })
-  }
-  ngOnInit(): void {
-    this.store.select(getTicketsState)
-      .subscribe((ticketState: TicketState) => {
-        this.ticketState = ticketState;
-        this.stateLoaded = true;
-      });
   }
 }

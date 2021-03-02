@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,9 @@ import * as TicketActions from '../ticket.actions';
 import { TicketService } from '../ticket.service';
 import { IExistingSupportTicket, INewSupportTicket, TicketError } from '../types';
 import { getTicketsState, TicketState } from '../ticket.reducer';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { priorityColorMap } from '../constants';
 
 
 
@@ -21,11 +24,12 @@ export class EditableTicketComponent {
 
   ticket: INewSupportTicket | IExistingSupportTicket = {};
   snackConfig: MatSnackBarConfig;
-  statusMap: number[];
+  statusMap: any[];
   priorityMap: number[];
   saveType: SaveType;
   showDelete: boolean;
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  priorityColorMap: any = priorityColorMap;
 
   refersToOptions: any = {
     visible: true,
@@ -37,6 +41,7 @@ export class EditableTicketComponent {
   relatedTickets: IExistingSupportTicket[] = [];
   ticketState: TicketState;
 
+  @ViewChild('refersToInput') refersToInput: ElementRef<HTMLInputElement>;
 
   constructor(
     private store: Store<fromRoot.State>, private router: Router, private route: ActivatedRoute,
@@ -77,7 +82,13 @@ export class EditableTicketComponent {
   setRelatedTickets(): void {
 
     this.relatedTickets = this.ticketState.tickets.filter((ticket: IExistingSupportTicket) => {
-      return this.ticket.refersTo && this.ticket.refersTo.indexOf(ticket.id) !== -1;
+      const isInList = this.ticket.refersTo && this.ticket.refersTo.indexOf(ticket.id) !== -1;
+      
+      // Note: ticket may have been deleted...
+      const exists = this.ticketState.tickets
+        .map((ticket: IExistingSupportTicket) => ticket.id)
+        .indexOf(ticket.id);
+      return isInList && exists;
     })
   }
 
@@ -170,12 +181,40 @@ export class EditableTicketComponent {
 
   }
 
-  removeRelated() {
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    console.log('add... event=', event);
 
+    this.ticket.refersTo.push(Number(value));
+
+    // Reset the input value
+    if (input) {
+      input.value = null;
+    }
+    this.setRelatedTickets();
+    this.setRelatableTickets();
+    this.refersToInput.nativeElement.value = null;
   }
 
-  selectRelated(relatedTicket: IExistingSupportTicket) {
-    console.log('relatedTicket: ', relatedTicket);
+  remove(ticket: IExistingSupportTicket): void {
+    console.log('remove... ticket=', ticket);
+    const index = this.ticket.refersTo.indexOf(ticket.id);
+
+    if (index >= 0) {
+      this.ticket.refersTo.splice(index, 1);
+      this.setRelatedTickets();
+      this.setRelatableTickets();
+    }
+    this.refersToInput.nativeElement.value = null;
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const ticket: IExistingSupportTicket = event.option.value;
+    this.ticket.refersTo.push(ticket.id);
+    this.setRelatedTickets();
+    this.setRelatableTickets();
+    this.refersToInput.nativeElement.value = null;
   }
 
 }

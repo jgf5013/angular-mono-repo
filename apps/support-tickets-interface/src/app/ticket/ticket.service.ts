@@ -108,13 +108,13 @@ export class TicketService {
   }
 
   getStatusMap() {
-      return Object.keys(StatusType)
-          .filter(s => isNaN(Number(s)) === false)
+      return Object.values(StatusType)
+          .filter(s => !isNaN(Number(s)))
           .map(key => StatusType[key]);
   }
   getPriorityMap() {
     return Object.keys(PriorityType)
-        .filter(p => isNaN(Number(p)) === false)
+        .filter(p => !isNaN(Number(p)))
         .map(key => PriorityType[key]);
   }
 }

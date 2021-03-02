@@ -1,5 +1,4 @@
-import { PriorityType } from '../constants';
-import { StatusType } from '../constants';
+import { PriorityType, StatusType } from './constants';
 
 /** Note(s):
  * - Couldn't get the PriorityType and StatusType working as expected for selecting the existing value with Angular Material

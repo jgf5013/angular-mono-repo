@@ -18,16 +18,7 @@ export class TicketEffects {
   );
 
   ticketCreated$ = createEffect(() => this.actions$.pipe(
-    ofType(TicketActions.createTicket),
-    mergeMap(() => this.ticketService.getTickets()
-      .pipe(
-        map((tickets: IExistingSupportTicket[]) => TicketActions.ticketsLoaded({tickets: tickets}))
-      ))
-    )
-  );
-
-  ticketDeleted$ = createEffect(() => this.actions$.pipe(
-    ofType(TicketActions.deleteTicket),
+    ofType(TicketActions.createTicket, TicketActions.updateTicket, TicketActions.deleteTicket),
     mergeMap(() => this.ticketService.getTickets()
       .pipe(
         map((tickets: IExistingSupportTicket[]) => TicketActions.ticketsLoaded({tickets: tickets}))

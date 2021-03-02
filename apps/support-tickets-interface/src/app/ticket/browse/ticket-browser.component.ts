@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,38 +15,44 @@ import { priorityColorMap } from '../constants';
   templateUrl: './ticket-browser.component.html',
   styleUrls: ['./ticket-browser.component.scss']
 })
-export class TicketBrowserComponent implements AfterViewInit {
+export class TicketBrowserComponent implements OnInit {
 
   mobileDisplayedColumns: string[] = ['priority', 'title'];
   displayedColumns: string[] = ['id', ...this.mobileDisplayedColumns, 'status', 'description', 'email', 'refersTo'];
 
 
-  @ViewChild(MatSort) sort: MatSort;
-  tickets: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   
   ticketState: TicketState;
+  tableLoaded: boolean;
   constructor(
     private store: Store<fromRoot.State>, private activatedRoute: ActivatedRoute,
     private router: Router, private ticketService: TicketService) {
+      this.listenToTicketState();
+  }
+  ngOnInit(): void {
+    this.sort.sort(<MatSortable>{
+      id: 'priority',
+      start: 'desc'
+    });
+    this.dataSource.sort = this.sort;
+  }
+
+  listenToTicketState() {
+
     this.store.select(getTicketsState)
       .subscribe((ticketState: TicketState) => {
         this.ticketState = ticketState;
 
-        this.tickets = new MatTableDataSource(
-          this.mapTicketsToMatTableDataSource(this.ticketState.tickets)
-        );
+        this.dataSource.data = this.mapTicketsToMatTableDataSource(this.ticketState.tickets);
       });
-  }
-
-
-  ngAfterViewInit(): void {
-    this.sort.sort(<MatSortable>{id: 'priority', start: 'desc', disableClear: false});
-    this.tickets.sort = this.sort;
   }
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.tickets.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   createNewTicket(): void {

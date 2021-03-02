@@ -7,9 +7,9 @@ form {
   // justify-content: space-between;
   height: 100%;
 }
-mat-form-field {
-  min-width: 50%;
-}
+// mat-form-field {
+//   min-width: 50%;
+// }
 .ticket-content {
   > div {
     padding: 5px;
@@ -35,14 +35,26 @@ mat-form-field {
   }
 }
 
-.description {
-  display: flex;
-  flex-grow: 2;
-  & + div {
-    flex-grow: 0;
-  }
-}
+// .description {
+//   display: flex;
+//   flex-grow: 2;
+//   & + div {
+//     flex-grow: 0;
+//   }
+// }
 
 .input-item {
   margin: 5px;
+}
+
+.toggle-group {
+  margin: 5px 0px;
+}
+
+.right-panel {
+  flex-direction: column;
+}
+.toggle-group-wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
