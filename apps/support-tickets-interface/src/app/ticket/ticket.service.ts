@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 })
 export class TicketService {
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   getTickets(): Observable<IExistingSupportTicket[]> {

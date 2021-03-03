@@ -22,7 +22,7 @@ export class AppComponent {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
   
-  constructor(private store: Store<fromRoot.State>, private route: ActivatedRoute, private router: Router, public mediaObserver: MediaObserver) {
+  constructor(private store: Store<fromRoot.State>, private router: Router, public mediaObserver: MediaObserver) {
     
     this.listenToRouterUpdates();
     this.listenToMediaUpdates();

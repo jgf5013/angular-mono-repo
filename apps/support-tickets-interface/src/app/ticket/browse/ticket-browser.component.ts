@@ -1,13 +1,12 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducer';
-import { getTicketsState, TicketState } from '../ticket.reducer';
-import { TicketService } from '../ticket.service';
-import { IExistingSupportTicket } from '../types';
 import { priorityColorMap } from '../constants';
+import { getTicketsState, TicketState } from '../ticket.reducer';
+import { IExistingSupportTicket } from '../types';
 
 
 @Component({
@@ -29,7 +28,7 @@ export class TicketBrowserComponent implements OnInit {
   tableLoaded: boolean;
   constructor(
     private store: Store<fromRoot.State>, private activatedRoute: ActivatedRoute,
-    private router: Router, private ticketService: TicketService) {
+    private router: Router) {
       this.listenToTicketState();
   }
   ngOnInit(): void {
