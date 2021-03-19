@@ -2,7 +2,7 @@
     <button mat-icon-button aria-label="Menu icon">
         <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
     </button>
-    <span>Bright Computing</span><span *ngFor="let crumb of breadCrumbs">&nbsp;/&nbsp;{{crumb}}</span>
+    <span>Demo Org</span><span *ngFor="let crumb of breadCrumbs">&nbsp;/&nbsp;{{crumb}}</span>
 </mat-toolbar>
 <mat-sidenav-container [autosize]="true">
     <mat-sidenav #sidenav mode="side" opened>

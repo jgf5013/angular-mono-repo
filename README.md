@@ -1,6 +1,6 @@
 
 
-# Brightcomputing
+# demo-org
 
 This project was generated using [Nx](https://nx.dev).
 
@@ -53,7 +53,7 @@ Run `ng g @nrwl/angular:lib my-lib` to generate a library.
 
 > You can also use any of the plugins above to generate libraries as well.
 
-Libraries are shareable across libraries and applications. They can be imported from `@brightcomputing/mylib`.
+Libraries are shareable across libraries and applications. They can be imported from `@demo-org/mylib`.
 
 ## Development server
 

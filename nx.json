@@ -13,7 +13,7 @@
   "affected": {
     "defaultBase": "master"
   },
-  "npmScope": "brightcomputing",
+  "npmScope": "demo-org",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
@@ -23,12 +23,12 @@
     }
   },
   "projects": {
-    "support-tickets-interface": {
+    "staff-tools": {
       "tags": []
     },
-    "support-tickets-interface-e2e": {
+    "staff-tools-e2e": {
       "tags": [],
-      "implicitDependencies": ["support-tickets-interface"]
+      "implicitDependencies": ["staff-tools"]
     }
   }
 }

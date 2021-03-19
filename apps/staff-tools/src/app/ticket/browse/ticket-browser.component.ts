@@ -10,7 +10,7 @@ import { IExistingSupportTicket } from '../types';
 
 
 @Component({
-  selector: 'brightcomputing-ticket-browser',
+  selector: 'demo-org-ticket-browser',
   templateUrl: './ticket-browser.component.html',
   styleUrls: ['./ticket-browser.component.scss']
 })

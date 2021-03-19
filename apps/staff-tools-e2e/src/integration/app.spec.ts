@@ -1,9 +1,9 @@
 import { getheader } from '../support/app.po';
 
-describe('support-tickets-interface', () => {
+describe('staff-tools', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    getheader().contains('Bright Computing');
+    getheader().contains('Demo Org');
   });
 });

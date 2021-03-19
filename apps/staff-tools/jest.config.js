@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'support-tickets-interface',
+  displayName: 'staff-tools',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
   },
-  coverageDirectory: '../../coverage/apps/support-tickets-interface',
+  coverageDirectory: '../../coverage/apps/staff-tools',
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
     'jest-preset-angular/build/AngularSnapshotSerializer.js',

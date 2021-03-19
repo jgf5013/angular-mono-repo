@@ -9,14 +9,14 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "parserOptions": {
-        "project": ["apps/support-tickets-interface/tsconfig.*?.json"]
+        "project": ["apps/staff-tools/tsconfig.*?.json"]
       },
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "brightcomputing",
+            "prefix": "demo-org",
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "brightcomputing",
+            "prefix": "demo-org",
             "style": "kebab-case"
           }
         ]

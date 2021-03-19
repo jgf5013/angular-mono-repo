@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['<rootDir>/apps/support-tickets-interface'],
+  projects: ['<rootDir>/apps/staff-tools'],
 };

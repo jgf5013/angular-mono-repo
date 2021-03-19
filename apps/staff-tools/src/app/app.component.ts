@@ -11,7 +11,7 @@ import { getTicketsState, TicketState } from './ticket/ticket.reducer';
 
 
 @Component({
-  selector: 'brightcomputing-root',
+  selector: 'demo-org-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

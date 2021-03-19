@@ -16,7 +16,7 @@ import { priorityColorMap } from '../constants';
 
 
 @Component({
-  selector: 'brightcomputing-editable-ticket',
+  selector: 'demo-org-editable-ticket',
   templateUrl: './editable-ticket.component.html',
   styleUrls: ['./editable-ticket.component.scss']
 })
