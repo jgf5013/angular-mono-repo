@@ -12,4 +12,4 @@ This is a mono-repo app build using Angular and Nx. In place of a back-end servi
 * End-to-end: `ng e2e amcas-staff`
 
 ## Deploying the app
-See [angular.io/guide/deployment](https://angular.io/guide/deployment#deploy-to-github-pages)
+See [angular.io/guide/deployment](https://angular.io/guide/deployment#deploy-to-github-pages) where `your_project_name` is actually the name of this repository (not the app under the `apps` folder)
