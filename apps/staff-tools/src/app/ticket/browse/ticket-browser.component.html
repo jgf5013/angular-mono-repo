@@ -44,16 +44,6 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
-        <ng-container matColumnDef="refersTo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Refers To </th>
-          <td class="not-clickable" mat-cell *matCellDef="let element">
-            <mat-chip-list>
-              <mat-chip *ngFor="let relatedTicket of element.refersTo">
-                <a [routerLink]="[relatedTicket]">{{relatedTicket}}</a>
-              </mat-chip>
-            </mat-chip-list>
-          </td>
-        </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr class="clickable" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="goToTicketDetails(row.id)"></tr>

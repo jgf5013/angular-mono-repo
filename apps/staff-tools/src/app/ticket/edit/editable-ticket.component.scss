@@ -1,15 +1,13 @@
 .editable-ticket {
   height: 100%;
 }
+
 form {
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
   height: 100%;
 }
-// mat-form-field {
-//   min-width: 50%;
-// }
+
 .ticket-content {
   > div {
     padding: 5px;
@@ -23,7 +21,6 @@ form {
   align-self: flex-end;
 }
 
-
 .action-buttons {
   margin-top: auto;
   display: flex;
@@ -34,14 +31,6 @@ form {
       display: flex;
   }
 }
-
-// .description {
-//   display: flex;
-//   flex-grow: 2;
-//   & + div {
-//     flex-grow: 0;
-//   }
-// }
 
 .input-item {
   margin: 5px;

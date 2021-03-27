@@ -17,7 +17,7 @@ import { IExistingSupportTicket } from '../types';
 export class TicketBrowserComponent implements OnInit {
 
   mobileDisplayedColumns: string[] = ['priority', 'title'];
-  displayedColumns: string[] = ['id', ...this.mobileDisplayedColumns, 'status', 'description', 'email', 'refersTo'];
+  displayedColumns: string[] = ['id', ...this.mobileDisplayedColumns, 'status', 'description', 'email'];
 
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();

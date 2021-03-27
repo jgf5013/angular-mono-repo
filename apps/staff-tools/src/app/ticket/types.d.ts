@@ -7,27 +7,23 @@ import { PriorityType, StatusType } from './constants';
 export interface IExistingSupportTicket {
   id: number;
   title: string;
-  description: string
-  priority: PriorityType // (selectable from a predefined list)
-  status: StatusType     // (selectable from a predefined list)
-  email: string
-  refersTo: number[];   // <Relation to other Support tickets IDs>
+  description: string;
+  priority: PriorityType; // (selectable from a predefined list)
+  status: StatusType;     // (selectable from a predefined list)
+  email: string;
 }
 
 export interface INewSupportTicket {
   id?: number;
-  title?: string;
-  description?: string
-  priority?: number // (selectable from a predefined list)
-  status?: number     // (selectable from a predefined list)
-  email?: string
-  refersTo?: number[];   // <Relation to other Support tickets IDs>
+  title: string;
+  description: string;
+  priority: number; // (selectable from a predefined list)
+  status: number;     // (selectable from a predefined list)
+  email: string;
 }
 
-// export type ISupportTicket = IExistingSupportTicket | INewSupportTicket;
-
 export interface TicketError {
-  message: string,
-  ticket?: Partial<IExistingSupportTicket>,
-  error: any // Error object returned from API calls, etc.
+  message: string;
+  ticket?: Partial<IExistingSupportTicket>;
+  error: any; // Error object returned from API calls, etc.
 }

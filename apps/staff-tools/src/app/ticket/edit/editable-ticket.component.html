@@ -2,18 +2,18 @@
   <form #editableTicketForm="ngForm" id="editableTicketForm">
     <mat-form-field>
       <mat-label>Title</mat-label>
-      <input matInput name="title" class="ticket-title" placeholder="Leave a descriptive title" [(ngModel)]="ticket.title" mat-autosize required/>
+      <input matInput name="title" class="ticket-title" placeholder="Leave a descriptive title" [ngModel]="ticket?.title" (ngModelChange)="ticket.title = $event" mat-autosize required/>
     </mat-form-field>
 
     <div class="ticket-content" fxLayout.gt-sm="row">
       <div class="description" fxFlex.md="50" fxFlex.gt-md="75">
         <mat-form-field appearance="fill">
-          <textarea name="description" matInput placeholder="Ticket description" rows="10" [(ngModel)]="ticket.description"></textarea>
+          <textarea name="description" matInput placeholder="Ticket description" rows="8" [ngModel]="ticket?.description" (ngModelChange)="ticket.description = $event" ></textarea>
         </mat-form-field>
       </div>
-      <div class="right-panel">
+      <div class="right-panel" fxFlex.md="50" fxFlex.gt-md="25">
         <div class="toggle-group-wrapper">
-          <mat-button-toggle-group class="input-item toggle-group" name="status" [(ngModel)]="ticket.status" required>
+          <mat-button-toggle-group class="input-item toggle-group" name="status" [ngModel]="ticket?.status" (ngModelChange)="ticket.status = $event"  required>
             <mat-button-toggle *ngFor="let status of statusMap | keyvalue; let i = index;" [value]="i" aria-label="status-{{status.value}}">
               {{status.value}}
               <mat-icon *ngIf="i === 0">radio_button_unchecked</mat-icon> <!-- OPEN -->
@@ -23,7 +23,7 @@
           </mat-button-toggle-group>
         </div>
         <div class="toggle-group-wrapper">
-          <mat-button-toggle-group class="input-item toggle-group" name="priority" [(ngModel)]="ticket.priority" required>
+          <mat-button-toggle-group class="input-item toggle-group" name="priority" [ngModel]="ticket?.priority" (ngModelChange)="ticket.priority = $event"  required>
             <mat-button-toggle *ngFor="let priority of priorityMap | keyvalue; let i = index"
               [value]="i" aria-label="priority-{{priority.value}}" [style.color]="priorityColorMap[i]">
               {{priority.value}}
@@ -34,7 +34,7 @@
           </mat-button-toggle-group>
         </div>
         <mat-form-field appearance="fill" class="input-item">
-          <input name="email" matInput #email="ngModel" placeholder="email" [(ngModel)]="ticket.email" email required>
+          <input name="email" matInput #email="ngModel" placeholder="email" [ngModel]="ticket?.email" (ngModelChange)="ticket.email = $event"  email required>
           <mat-error *ngIf="!email.errors?.required && email.errors?.email && (email?.dirty || email?.touched)">
             Please enter a valid email address
           </mat-error>
@@ -42,41 +42,26 @@
             Email is required
           </mat-error>
         </mat-form-field>
-        <div>
-          <mat-chip-list class="input-item" #chipList aria-label="Related tickets selection">
-            <mat-chip
-              *ngFor="let relatedTicket of relatedTickets"
-              [selectable]="refersToOptions.selectable"
-              [removable]="refersToOptions.removable"
-              (removed)="remove(relatedTicket)">
-              {{relatedTicket.title}}
-              <mat-icon matChipRemove *ngIf="refersToOptions.removable">cancel</mat-icon>
-            </mat-chip>
-            <input
-              placeholder="Add a related ticket..."
-              #refersToInput
-              [matAutocomplete]="auto"
-              [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="add($event)">
-          </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-            <mat-option *ngFor="let relatableTicket of relatableTickets" [value]="relatableTicket">
-              {{relatableTicket.title}}
-            </mat-option>
-          </mat-autocomplete>
-        </div>
       </div>
     </div>
     <div class="action-buttons" >
         <button mat-stroked-button (click)="goToTicketBrowser()">
           <mat-icon>arrow_back_io</mat-icon><span fxShow fxHide.lt-sm="true">All Tickets</span>
         </button>
+        
         <div>
-            <button *ngIf="showDelete" mat-stroked-button color="warn" (click)="deleteTicket(ticket.id)">
+            <button *ngIf="showDelete" mat-stroked-button color="warn" (click)="deleteTicket(ticket.id)"
+              #tooltip="matTooltip"
+              matTooltip="Changes are saved to local storage since there is no supporting service"
+              [matTooltipPosition]="'above'"
+              aria-label="Delete ticket">
               <mat-icon>delete</mat-icon><span fxShow fxHide.lt-sm="true">Delete</span>
             </button>
-            <button type="submit" mat-stroked-button [disabled]="!editableTicketForm.valid" (click)="saveTicket()" color="primary">
+            <button type="submit" mat-stroked-button [disabled]="!editableTicketForm.valid" (click)="saveTicket()" color="primary"
+              #tooltip="matTooltip"
+              matTooltip="Changes are saved to local storage since there is no supporting service"
+              [matTooltipPosition]="'above'"
+              aria-label="Save ticket">
               <mat-icon>save</mat-icon><span fxShow fxHide.lt-sm="true">Save</span>
             </button>
         </div>

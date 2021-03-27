@@ -1,0 +1,53 @@
+{
+    "supportTickets": [
+      {
+        "id": 0,
+        "title": "Feature `download` doesn't work",
+        "description": "The feature `download` in the main page of the website doesn't seems to work. The browser crashes after clicking the download button. Test",
+        "priority": 1,
+        "status": 0,
+        "email": "user1@example.org",
+        "refersTo": [
+          2,
+          1,
+          0,
+          24
+        ]
+      },
+      {
+        "id": 1,
+        "title": "Website is unusable on mobile devices",
+        "description": "When I open the website on a mobile device the layout is messed up.",
+        "priority": 0,
+        "status": 1,
+        "email": "email@example.org",
+        "refersTo": []
+      },
+      {
+        "id": 2,
+        "title": "Browser crashes after clicking the `download` button in the main page",
+        "description": "When I click on the `download` button in the main page the browser crashes. Saying hi to Matt!",
+        "priority": 1,
+        "status": 2,
+        "email": "user2@example.org",
+        "refersTo": [
+          0,
+          27,
+          35,
+          1
+        ]
+      },
+      {
+        "title": "sdfsdf",
+        "description": "sdfsdfsfsd",
+        "priority": 1,
+        "email": "jgf5013@gmail.com",
+        "refersTo": [
+          1,
+          2
+        ],
+        "id": 24,
+        "status": 0
+      }
+    ]
+  }

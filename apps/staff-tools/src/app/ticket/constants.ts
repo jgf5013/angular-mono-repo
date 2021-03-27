@@ -22,4 +22,10 @@ export enum SaveType {
     UPDATE
 }
 
-export const initialTicket: INewSupportTicket = {};
+export const initialTicket: INewSupportTicket = {
+    email: null,
+    title: null,
+    description: null,
+    priority: PriorityType.LOW,
+    status: StatusType.OPEN
+};

@@ -1,7 +1,15 @@
-// @import '~@angular/material/theming';
 .main-content {
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
+}
+
+.xs-main-content {
+    @extend .main-content;
+    height: 89vh;
+}
+
+.gt-xs-main-content {
+    @extend .main-content;
     height: 91vh;
 }
