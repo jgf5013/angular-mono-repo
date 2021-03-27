@@ -12,7 +12,4 @@ This is a mono-repo app build using Angular and Nx. In place of a back-end servi
 * End-to-end: `ng e2e amcas-staff`
 
 ## Deploying the app
-Note(s):
-* Uses `angular-cli-ghpages` dependency
-
-`ng deploy {app-name} --base-href '{app-name}'`
+See [angular.io/guide/deployment](https://angular.io/guide/deployment#deploy-to-github-pages)
