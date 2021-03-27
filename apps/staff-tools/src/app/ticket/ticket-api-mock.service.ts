@@ -40,21 +40,23 @@ export class TicketApiMockService {
         return this.get(newTicket.id);
     }
 
-    put(ticket: IExistingSupportTicket): Observable<IExistingSupportTicket> {
+    put(updatedTicket: IExistingSupportTicket): Observable<IExistingSupportTicket> {
         const ticketData: IExistingSupportTicket[] = this.getLocalStorage();
-        const updatedTicketData = {
-            lastUpdate: new Date().toJSON(),
-            ...ticketData.map(t => t.id === Number(ticket.id) ? ticket : t)
-        }
+        const updatedTicketData = [
+            ...ticketData.map(existingTicket => existingTicket.id === Number(updatedTicket.id) ?
+                {...updatedTicket, lastUpdate: new Date().toJSON() } :
+                existingTicket
+            )
+        ];
         this.setLocalStorage(updatedTicketData);
-        return this.get(ticket.id);
+        return this.get(updatedTicket.id);
     }
 
-    delete(id: number): Observable<void> {
+    delete(id: number): Observable<{}> {
         const ticketData: IExistingSupportTicket[] = this.getLocalStorage();
         const updatedTicketData = ticketData.filter(t => t.id !== Number(id));
         this.setLocalStorage(updatedTicketData);
-        return of();
+        return of({});
     }
 
     private getNextTicketId(): number {
