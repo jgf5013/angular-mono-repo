@@ -11,6 +11,7 @@ export interface IExistingSupportTicket {
   priority: PriorityType; // (selectable from a predefined list)
   status: StatusType;     // (selectable from a predefined list)
   email: string;
+  lastUpdate: string;
 }
 
 export interface INewSupportTicket {

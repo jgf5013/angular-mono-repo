@@ -123,6 +123,10 @@
             "jestConfig": "apps/staff-tools/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     },

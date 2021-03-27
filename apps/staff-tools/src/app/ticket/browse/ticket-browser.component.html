@@ -39,10 +39,14 @@
             <mat-icon *ngIf="element.priority === 1">horizontal_rule</mat-icon>
             <mat-icon *ngIf="element.priority === 2">arrow_upward</mat-icon>
           </td>
-        </ng-container>   
+        </ng-container>
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastUpdate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Update </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastUpdate | date: 'MMM dd, yyyy HH:mm'}} </td>
         </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
